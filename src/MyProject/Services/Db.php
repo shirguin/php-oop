@@ -19,7 +19,7 @@ class Db
         $this->pdo->exec('SET NAMES UTF8');
     }
 
-    public function query(string $sql, $params = []): ?array
+    public function query(string $sql, $params = [], string $className = 'stdClass'): ?array
     {
         $stn = $this->pdo->prepare($sql);
         $result = $stn->execute($params);
@@ -28,6 +28,6 @@ class Db
             return null;
         }
 
-        return $stn->fetchAll();
+        return $stn->fetchAll(\PDO::FETCH_CLASS, $className);
     }
 }
