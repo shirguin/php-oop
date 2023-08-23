@@ -40,7 +40,7 @@ class Article extends ActiveRecordEntity
         return 'articles';
     }
 
-    public function getAuthorId():int
+    public function getAuthorId(): int
     {
         return (int) $this->authorId;
     }
@@ -51,5 +51,15 @@ class Article extends ActiveRecordEntity
     public function getAuthor(): User
     {
         return User::getById($this->authorId);
+    }
+
+    public function setName($value): void
+    {
+        $this->name = $value;
+    }
+
+    public function setText($value): void
+    {
+        $this->text = $value;
     }
 }
