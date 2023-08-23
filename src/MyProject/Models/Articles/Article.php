@@ -1,38 +1,23 @@
 <?php
+
 namespace MyProject\Models\Articles;
 
+use MyProject\Models\ActiveRecordEntity;
 use MyProject\Models\Users\User;
 
-class Article
+class Article extends ActiveRecordEntity
 {
-    /** @var int */
-    private $id;
+    /** @var string */
+    protected $name;
 
     /** @var string */
-    private $name;
+    protected $text;
 
     /** @var string */
-    private $text;
-
-    /** @var int */
-    private $authorId;
+    protected $authorId;
 
     /** @var string */
-    private $createdAt;
-
-    public function __set($name, $value)
-    {
-        $camelCaseName = $this->underscoreToCamelCase($name);
-        $this->$camelCaseName = $value;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
+    protected $createdAt;
 
     /**
      * @return string
@@ -50,32 +35,21 @@ class Article
         return $this->text;
     }
 
-
-    private function underscoreToCamelCase(string $source): string
+    protected static function getTableName(): string
     {
-        return lcfirst(str_replace('_', '', ucwords($source, '_')));
+        return 'articles';
     }
 
+    public function getAuthorId():int
+    {
+        return (int) $this->authorId;
+    }
 
-    /*     public function __construct(string $title, string $text, User $author)
-        {
-            $this->title = $title;
-            $this->text = $text;
-            $this->author = $author;
-        }
-
-        public function getTitle(): string
-        {
-            return $this->title;
-        }
-
-        public function getText(): string
-        {
-            return $this->text;
-        }
-
-        public function getAuthor(): User
-        {
-            return $this->author;
-        } */
+    /**
+     * @return User
+     */
+    public function getAuthor(): User
+    {
+        return User::getById($this->authorId);
+    }
 }
