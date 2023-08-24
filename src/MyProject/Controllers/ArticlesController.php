@@ -44,14 +44,39 @@ class ArticlesController
     {
         $article = Article::getById($articleId);
 
-        if($article === null){
+        if ($article === null) {
             $this->view->renderHtml('errors/404.php', [], 404);
             return;
         }
 
         $article->setName('Новое название статьи');
         $article->setText('Новый текст статьи');
-        
+
         $article->save();
+    }
+
+    public function add(): void
+    {
+        $author = User::getById(1);
+
+        $article = new Article();
+        $article->setAuthor($author);
+        $article->setName('Новое название статьи');
+        $article->setText('Новый текст статьи');
+
+        $article->save();
+        var_dump($article);
+    }
+
+    public function delete(int $id): void
+    {
+        $article = Article::getById($id);
+
+        if ($article) {
+            $article->delete();
+            echo 'Статья удалена';
+        } else {
+            echo 'Статьи с таким id не существует';
+        }
     }
 }
