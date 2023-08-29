@@ -59,8 +59,8 @@ try {
     }
 
     if (!$isRouteFound) {
-/*         echo 'Страница не найдена!';
-        return; */
+        /*         echo 'Страница не найдена!';
+                return; */
         //Бросаем исключение
         throw new \MyProject\Exceptions\NotFoundException();
     }
@@ -75,8 +75,8 @@ try {
 } catch (\MyProject\Exceptions\DbException $e) {
     //echo $e->getMessage();
     $view = new \MyProject\View\View(__DIR__ . '/../templates/errors');
-    $view->renderHtml('500.php',['error'=>$e->getMessage(), 500]);
-} catch (\MyProject\Exceptions\NotFoundException $e){
+    $view->renderHtml('500.php', ['error' => $e->getMessage(), 500]);
+} catch (\MyProject\Exceptions\NotFoundException $e) {
     $view = new \MyProject\View\View(__DIR__ . '/../templates/errors');
-    $view->renderHtml('404.php',['error'=>$e->getMessage(), 404]);
+    $view->renderHtml('404.php', ['error' => $e->getMessage(), 404]);
 }
