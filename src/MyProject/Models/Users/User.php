@@ -27,7 +27,7 @@ class User extends ActiveRecordEntity
     /** @var string */
     protected $createdAt;
 
-        /**
+    /**
      * @return string
      */
     public function getNickname(): string
@@ -35,44 +35,51 @@ class User extends ActiveRecordEntity
         return $this->nickname;
     }
 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
     protected static function getTableName(): string
     {
         return 'users';
     }
 
-    public static function signUp(array $userData):User
+    public static function signUp(array $userData): User
     {
+        //mail('shirgin75@mail.ru', 'Проверка почтового сервера', 'Это второе письмо', 'From: shirgin75@mail.ru');
+
         //Проверки на валидность
-        if (empty($userData['nickname'])){
+        if (empty($userData['nickname'])) {
             throw new \InvalidArgumentException('Не передан nickname');
         }
 
-        if (!preg_match('/^[a-zA-Z0-9]+$/', $userData['nickname'])){
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $userData['nickname'])) {
             throw new \InvalidArgumentException('Nickname может состоять только из символов латинского алфавита и цифр');
         }
 
-        if (empty($userData['email'])){
+        if (empty($userData['email'])) {
             throw new \InvalidArgumentException('Не передан email');
         }
 
-        if (!filter_var($userData['email'], FILTER_VALIDATE_EMAIL)){
+        if (!filter_var($userData['email'], FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException('Email не корректен');
         }
 
-        if (empty($userData['password'])){
+        if (empty($userData['password'])) {
             throw new \InvalidArgumentException('Не передан password');
         }
 
-        if (mb_strlen($userData['password'])<8){
+        if (mb_strlen($userData['password']) < 8) {
             throw new \InvalidArgumentException('Пароль должен быть не менее 8 символов');
         }
 
         //Проверки на существование в базе данных
-        if (static::findOneByColumn('nickname', $userData['nickname'] !== null)){
+        if (static::findOneByColumn('nickname', $userData['nickname'] !== null)) {
             throw new \InvalidArgumentException('Пользователь с таким nickname уже существует');
         }
 
-        if (static::findOneByColumn('email', $userData['email'] !== null)){
+        if (static::findOneByColumn('email', $userData['email'] !== null)) {
             throw new \InvalidArgumentException('Пользователь с таким email уже существует');
         }
 
@@ -87,5 +94,11 @@ class User extends ActiveRecordEntity
         $user->save();
 
         return $user;
+    }
+
+    public function activate(): void
+    {
+        $this->isConfirmed = true;
+        $this->save();
     }
 }
