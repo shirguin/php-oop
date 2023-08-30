@@ -51,6 +51,11 @@ class User extends ActiveRecordEntity
         return 'users';
     }
 
+    public function isAdmin():bool
+    {
+        return $this->role === 'admin';
+    }
+
     public static function signUp(array $userData): User
     {
         //mail('shirgin75@mail.ru', 'Проверка почтового сервера', 'Это второе письмо', 'From: shirgin75@mail.ru');
