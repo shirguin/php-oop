@@ -3,6 +3,7 @@
 namespace MyProject\Models\Users;
 
 use MyProject\Models\ActiveRecordEntity;
+use MyProject\Exceptions\InvalidArgumentException;
 
 class User extends ActiveRecordEntity
 {
@@ -33,6 +34,11 @@ class User extends ActiveRecordEntity
     public function getNickname(): string
     {
         return $this->nickname;
+    }
+
+    public function getAuthToken(): string
+    {
+        return $this->authToken;
     }
 
     public function getEmail(): string
@@ -100,5 +106,44 @@ class User extends ActiveRecordEntity
     {
         $this->isConfirmed = true;
         $this->save();
+    }
+
+    public static function login(array $loginData): User
+    {
+        if (empty($loginData['email'])) {
+            throw new InvalidArgumentException('Не передан email');
+        }
+
+        if (empty($loginData['password'])) {
+            throw new InvalidArgumentException('Не передан password');
+        }
+
+        $user = User::findOneByColumn('email', $loginData['email']);
+        if ($user === null) {
+            throw new InvalidArgumentException('Нет пользователя с таким email');
+        }
+
+        if (!password_verify($loginData['password'], $user->getPasswordHash())) {
+            throw new InvalidArgumentException('Неправильный пароль');
+        }
+
+        if (!$user->isConfirmed) {
+            throw new InvalidArgumentException('Пользователь не подтверждён');
+        }
+
+        $user->refreshAuthToken();
+        $user->save();
+
+        return $user;
+    }
+
+    public function getPasswordHash(): string
+    {
+        return $this->passwordHash;
+    }
+
+    private function refreshAuthToken()
+    {
+        $this->authToken = sha1(random_bytes(100)) . sha1(random_bytes(100));
     }
 }
