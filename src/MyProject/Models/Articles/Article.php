@@ -106,4 +106,10 @@ class Article extends ActiveRecordEntity
 
         return $this;
     }
+
+    public function getParsedText(): string
+    {
+        $parser = new \Parsedown();
+        return $parser->text($this->getText());
+    }
 }

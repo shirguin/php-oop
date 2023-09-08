@@ -1,0 +1,19 @@
+{
+    "name": "shirguin/myproject",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Alex Shirgin",
+            "email": "shirguin@yandex.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "MyProject\\": "src/MyProject/"
+        }
+    },
+    "require": {
+        "erusev/parsedown": "^1.7"
+    }
+}
