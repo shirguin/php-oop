@@ -3,7 +3,7 @@
     <?= $article->getName() ?>
 </h1>
 <p>
-    <?= $article->getText() ?>
+    <?= $article->getParsedText() ?>
 </p>
 <p>Автор:
     <?= $article->getAuthor()->getNickname() ?>
